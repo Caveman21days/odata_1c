@@ -1,4 +1,5 @@
 require 'json'
+require 'cgi'
 
 module Odata1c
   # Сущность в 1С (набор сведений определённой категории).
@@ -39,7 +40,7 @@ module Odata1c
     # @return [EntityValues]
     def get(arg)
       query = self.class.detect_arg(arg)
-      uri = url(URI.encode(query) + '?$format=json')
+      uri = url(CGI.escape(query) + '?$format=json')
       response = service.execute_request(uri, 'get').body
       EntityValues.new(self, Helpers.convert_to_nil(JSON.parse(response)))
     end
